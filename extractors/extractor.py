@@ -33,7 +33,9 @@ def extractor (filelist, savedir, descobj):
 
     # Iterate through all of the images in filelist and extract features
     for inames in progress.bar(filelist):
-       
+
+        # TODO: check to see if feature file already exists!!!!
+
         # Read and extract image descriptors
         img = misc.imread(inames) # read in the image
         fea = descobj.extract(img) # extract image descriptor

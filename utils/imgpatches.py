@@ -1,12 +1,22 @@
 """ Functions for extracting, processing and displaying image patches.
     
-    TODO document
+    This file has a few useful functions for extracting and processing patches
+    from images. For example, grid_patches() extracts from an overlapping dense
+    grid in an image. pyramid_pooling() implements spatial pyramid pooling from
+    [1]. There are also patch centring (DC component removal) and normalisation
+    routines etc.
 
     Many of these functions are ports from the code developed for [1].
 
     [1] Yang, J.; Yu, K.; Gong, Y. & Huang, T. Linear spatial pyramid matching 
         using sparse coding for image classification Computer Vision and Pattern 
         Recognition, 2009. CVPR 2009. IEEE Conference on, 2009, 1794-1801
+
+    Author: Daniel Steinberg
+            Australian Centre for Field Robotics
+            University of Sydney
+
+    Date:   13/02/2012
 
 """
 
@@ -18,6 +28,7 @@ from skimage.transform import resize
 from scipy.misc import imread, toimage
 from clint.textui import progress
 from matplotlib import pyplot as plt
+
 
 def training_patches (imnames, npatches, psize, maxdim=None, colour=False):
     """ Extract patches from images for dictionary training

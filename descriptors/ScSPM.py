@@ -1,11 +1,11 @@
 from descriptor import Descriptor
 from skimage import color 
 
-import matplotlib.pyplot as plt
 
 class ScSPM (Descriptor):
 
-    def __init__ (self, maximgdim=320, patchsize=16, patchstride=8):
+
+    def __init__ (self, maximgdim=320, patchsize=16, patchstride=8, active=10):
         
         self.maximgdim   = maximgdim
         self.patchsize   = patchsize
@@ -14,9 +14,15 @@ class ScSPM (Descriptor):
 
     def extract (self, image):
         
-        gimg = color.rgb2gray(image)
+        #gimg = color.rgb2gray(image)
 
         #plt.imshow(hog_image, cmap=plt.cm.gray)
         #plt.show()
 
-        return fea
+        #return fea
+        return
+
+
+    def learn_dictionaries (images, npatches, l1_dsize, l2_dsize):
+
+        return

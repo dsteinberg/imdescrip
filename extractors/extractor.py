@@ -9,10 +9,10 @@ def extractor (filelist, savedir, descobj):
     """ Extract features/descriptors from a batch of images. 
 
     This function calls an image descripor object on a batch of imaged in order
-    to extract the images descripor.
-
+    to extract the images descripor. If a feature/descriptor file already exists
+    for the image, it is skipped.
     
-    Args:
+    Arguments:
         filelist: A list of files of image names including their paths of images
                   to read and extract descriptors from
 
@@ -28,19 +28,23 @@ def extractor (filelist, savedir, descobj):
 
     # Try to make the save path
     if not os.path.exists(savedir):
-        os.makedev(savedir)
+        os.mkdir(savedir)
     
 
     # Iterate through all of the images in filelist and extract features
-    for inames in progress.bar(filelist):
+    for impath in progress.bar(filelist):
 
-        # TODO: check to see if feature file already exists!!!!
+        imname = os.path.splitext(os.path.split(impath)[1])[0] # get image name
+        feafile = os.path.join(savedir, imname + ".p")
+        
+        # Check to see if feature file already exists, continue if so
+        if os.path.isfile(feafile) == True:
+            continue
 
         # Read and extract image descriptors
-        img = misc.imread(inames) # read in the image
+        img = misc.imread(impath) # read in the image
         fea = descobj.extract(img) # extract image descriptor
    
         # Write pickled feature
-        imsname = os.path.splitext(os.path.split(inames)[1])[0] # get image name
-        with open(os.path.join(savedir, imsname+".p"), 'wb') as f:
+        with open(feafile, 'wb') as f:
             cpk.dump(fea, f)

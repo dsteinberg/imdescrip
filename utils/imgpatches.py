@@ -33,7 +33,7 @@ from matplotlib import pyplot as plt
 def training_patches (imnames, npatches, psize, maxdim=None, colour=False):
     """ Extract patches from images for dictionary training
 
-    Args:
+    Arguments:
         imnames: A list of image names from which to extract training patches.
         npatches: The number (int) of patches to extract from the images
         maxdim: The maximum dimension of the image in pixels. The image is
@@ -260,9 +260,9 @@ def disp_patches (patches, colour=False):
     for i, p in enumerate(patches):
         plt.subplot(ssize, ssize, i + 1)
         if colour == False:
-            plt.imshow(p.np.reshape(psize, psize), cmap="gray")
+            plt.imshow(p.reshape(psize, psize), cmap="gray")
         else:
-            plt.imshow(toimage(p.np.reshape(psize, psize, 3), mode='RGB'))
+            plt.imshow(toimage(p.reshape(psize, psize, 3), mode='RGB'))
         plt.axis("off")
     plt.show()
 

@@ -168,8 +168,29 @@ def p_mean (patches):
         return patches
 
 
+def p_max (patches):
+    """ Return the max values of the columns in a matrix.
+
+    This function is used for pyramid pooling (see pyramid_pooling()), and given
+    an (npatches, ndims) matrix, will return a (1, ndims) vector of the
+    max() values in each column.
+
+    Arguments:
+        patches: an (npatches, ndims) array of image patches
+
+    Returns:
+        a (1, ndim) array of the max of the patches in each column.
+
+    """
+
+    if patches.shape[0] > 1:
+        return np.max(patches, axis=0)
+    else:
+        return patches
+
+
 def pyramid_pooling (patches, centresx, centresy, imsize, levels=(1,2,4), 
-        pfun=p_maxabs):
+        pfun=p_max):
     """ Spatial pyramid pooling of image patches (or codes of image patches)
 
     This funtion implements spatial pyramid pooling, which essentially turns a
@@ -224,8 +245,8 @@ def pyramid_pooling (patches, centresx, centresy, imsize, levels=(1,2,4),
                 poolpatches[cnt,:] = pfun(patches[pidx,:])
             cnt += 1
 
-    #return poolpatches.flatten(1) 
-    return poolpatches
+    return poolpatches.flatten(1) 
+
 
 def disp_patches (patches, colour=False):
     """ Display flattened (square) patches in a grid.

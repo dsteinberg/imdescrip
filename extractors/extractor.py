@@ -1,7 +1,7 @@
 # Image Descriptor Extraction Module
 
 import os
-import cPickle as cpk
+import cPickle as pk
 from clint.textui import progress
 from scipy import misc
 
@@ -17,8 +17,9 @@ def extractor (filelist, savedir, descobj):
                   to read and extract descriptors from
 
         savedir:  A directory in which to save all of the image features. They
-                  are pickled objects with the same name as the image file. The
-                  object that is pickled is the return from descobj.extract().
+                  are pickled objects (protocol 2) with the same name as the
+                  image file. The object that is pickled is the return from
+                  descobj.extract().
 
         decobj:   An image descriptor object which does the actual extraction
                   work. the method called is descobj.extract(image). See
@@ -47,4 +48,4 @@ def extractor (filelist, savedir, descobj):
    
         # Write pickled feature
         with open(feafile, 'wb') as f:
-            cpk.dump(fea, f)
+            pk.dump(fea, f, protocol=2)

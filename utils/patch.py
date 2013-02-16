@@ -24,10 +24,10 @@ import math
 import numpy as np 
 from sklearn.feature_extraction.image import extract_patches_2d
 from skimage.color import rgb2gray
-from skimage.transform import resize
-from scipy.misc import imread, toimage
+from scipy.misc import toimage
 from clint.textui import progress
 from matplotlib import pyplot as plt
+from image import imread_resize
 
 
 def training_patches (imnames, npatches, psize, maxdim=None, colour=False):
@@ -53,10 +53,10 @@ def training_patches (imnames, npatches, psize, maxdim=None, colour=False):
 
     print('Extracting patches from images...')
     for ims in progress.bar(imnames):
-        img = imread_resize(ims) # read in and resize the image
+        img = imread_resize(ims, maxdim) # read in and resize the image
         
         # Extract patches and map to grayscale if necessary
-        if (colour == False) and (img.shape[2] == 3):
+        if (colour == False) and (img.ndim == 3):
             imgg = rgb2gray(img)
             plist.append(extract_patches_2d(imgg, (psize, psize), ppeimg))
         else:
@@ -245,7 +245,7 @@ def pyramid_pooling (patches, centresx, centresy, imsize, levels=(1,2,4),
                 poolpatches[cnt,:] = pfun(patches[pidx,:])
             cnt += 1
 
-    return poolpatches.flatten(1) 
+    return poolpatches.flatten() 
 
 
 def disp_patches (patches, colour=False):
@@ -322,28 +322,5 @@ def centre_patches (patches):
     return patches - np.mean(patches, axis=1).reshape(patches.shape[0],1)
 
 
-def imread_resize (imname, maxdim=None):
-    """ Read and resize the and image to a maximum dimension (preserving aspect)
-
-    Arguments:
-        imname: string of the full name and path to the image to be read
-        maxdim: int of the maximum dimension the image should take (in pixels).
-            None if no resize is to take place (same as imread).
-
-    Returns:
-        image: (rows, cols, channels) np.array of the image, if maxdim is not
-            None, then {rows,cols} <= maxdim.  
-    """
-    # read in the image
-    image = imread(imname)         
-
-    # Resize image if necessary
-    imgdim = max(image.shape)
-    if (imgdim > maxdim) and (maxdim is not None):
-        scaler = float(imgdim)/maxdim
-        return resize(image, (round(scaler*image.shape[0]), 
-                              round(scaler*image.shape[1])))
-    else:
-        return image
 
 

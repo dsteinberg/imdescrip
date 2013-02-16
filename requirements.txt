@@ -1,0 +1,15 @@
+# In the Ubuntu/Debian repos
+scipy
+numpy
+sklearn
+matplotlib
+cython
+libboost_python
+
+# Use pip
+skimage
+clint
+
+# May need a bit of manual tweaking
+pyvlfeat (manual download, change dep libboost-python-mt-2.6 to 2.7, pip install
+-e)

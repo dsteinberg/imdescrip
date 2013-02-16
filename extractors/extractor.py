@@ -3,7 +3,6 @@
 import os
 import cPickle as pk
 from clint.textui import progress
-from scipy import misc
 
 def extractor (filelist, savedir, descobj):
     """ Extract features/descriptors from a batch of images. 
@@ -42,9 +41,8 @@ def extractor (filelist, savedir, descobj):
         if os.path.isfile(feafile) == True:
             continue
 
-        # Read and extract image descriptors
-        img = misc.imread(impath) # read in the image
-        fea = descobj.extract(img) # extract image descriptor
+        # Extract image descriptors
+        fea = descobj.extract(impath) # extract image descriptor
    
         # Write pickled feature
         with open(feafile, 'wb') as f:

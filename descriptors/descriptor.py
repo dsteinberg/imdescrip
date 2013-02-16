@@ -15,8 +15,8 @@ class Descriptor:
     def extract (self, image):
         """ Method required for actual descriptor extraction. 
         
-            This method should accept an image (as numpy array or cvMat) and
-            should return an object/array which is the actual feature.
+            This method should accept an image file name and should return an
+            object/array which is the actual feature.
         """
         pass
 

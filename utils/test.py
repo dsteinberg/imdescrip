@@ -2,7 +2,7 @@
 
 # Unit test for imgpatches module
 
-import imgpatches as imp
+import patch as imp
 from numpy import array, arange, vstack, ones, zeros, sqrt, abs
 import unittest 
 

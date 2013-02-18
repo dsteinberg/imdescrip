@@ -5,10 +5,7 @@
 import math
 import numpy as np
 from sklearn.linear_model import orthogonal_mp_gram as omp
-from sklearn.decomposition import MiniBatchDictionaryLearning as MBdiclearn 
-#from sklearn.cluster import KMeans
-#from sklearn.decomposition import DictionaryLearning as diclearn
-#from skimage import color
+from sklearn.cluster import KMeans
 from utils import patch as pch, siftwrap as sw
 from descriptor import Descriptor
 
@@ -18,7 +15,7 @@ class ScSPM (Descriptor):
     """
 
 
-    def __init__ (self, maxdim=320, psize=16, pstride=8, active=10, dsize=512,
+    def __init__ (self, maxdim=320, psize=16, pstride=8, active=10, dsize=1024,
                     levels=(1,2,4), compress_dim=None):
         """
         """
@@ -66,7 +63,7 @@ class ScSPM (Descriptor):
             return fea
         
 
-    def learn_dictionary (self, images, npatches, niter=5000):
+    def learn_dictionary (self, images, npatches, ntrials=1):
         """
         """
 
@@ -74,14 +71,13 @@ class ScSPM (Descriptor):
         patches = sw.training_patches(images, npatches, self.psize, self.maxdim)
           
         # Learn dictionary
-        print('Learning dictionary...')
-        sdic = MBdiclearn(n_atoms=self.dsize, verbose=True, n_iter=niter,
-                            transform_n_nonzero_coefs=self.active)
+        print('Learning K-means dictionary...')
+        sdic = KMeans(k=self.dsize, verbose=True, n_init=ntrials)
         sdic.fit(patches)
         print('done')
 
         # Normalise and save the dictionary
-        self.dic = pch.norm_patches(sdic.components_)
+        self.dic = pch.norm_patches(sdic.cluster_centers_)
         self.dic_gram = np.dot(self.dic, self.dic.T)
         
         return

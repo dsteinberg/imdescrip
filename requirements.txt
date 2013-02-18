@@ -1,13 +1,13 @@
 # In the Ubuntu/Debian repos
 scipy
 numpy
-sklearn
 matplotlib
 cython
 libboost_python
 
 # Use pip
-skimage
+scikit-learn==0.13
+scikit-image
 clint
 
 # May need a bit of manual tweaking

@@ -72,7 +72,7 @@ class ScSPM (Descriptor):
           
         # Learn dictionary
         print('Learning K-means dictionary...')
-        sdic = KMeans(k=self.dsize, verbose=True, n_init=ntrials)
+        sdic = KMeans(n_clusters=self.dsize, verbose=True, n_init=ntrials)
         sdic.fit(patches)
         print('done')
 

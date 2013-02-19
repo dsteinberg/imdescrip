@@ -1,5 +1,4 @@
-""" TODO
-"""
+""" Some useful and generic commonly performed image operations. """
 
 from skimage.transform import resize
 from scipy.misc import imread
@@ -24,7 +23,7 @@ def imread_resize (imname, maxdim=None):
     # Resize image if necessary
     imgdim = max(image.shape)
     if (imgdim > maxdim) and (maxdim is not None):
-        scaler = float(imgdim)/maxdim
+        scaler = float(maxdim)/imgdim
         return resize(image, (round(scaler*image.shape[0]), 
                               round(scaler*image.shape[1])))
     else:

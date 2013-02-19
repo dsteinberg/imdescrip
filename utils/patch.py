@@ -30,7 +30,8 @@ from matplotlib import pyplot as plt
 from image import imread_resize
 
 
-def training_patches (imnames, npatches, psize, maxdim=None, colour=False):
+def training_patches (imnames, npatches, psize, maxdim=None, colour=False,
+                        verbose=False):
     """ Extract patches from images for dictionary training
 
     Arguments:
@@ -39,6 +40,7 @@ def training_patches (imnames, npatches, psize, maxdim=None, colour=False):
         maxdim: The maximum dimension of the image in pixels. The image is
             rescaled if it is larger than this. By default there is no scaling. 
         psize: A int of the size of the square patches to extract
+        verbose: bool, print progress bar
 
     Returns:
         An np.array (npatches, psize**2*3) for RGB or (npatches, psize**2) for
@@ -51,8 +53,10 @@ def training_patches (imnames, npatches, psize, maxdim=None, colour=False):
     ppeimg = int(round(float(npatches)/nimg))
     plist = []
 
-    print('Extracting patches from images...')
-    for ims in progress.bar(imnames):
+    if verbose == True:
+        print('Extracting patches from images...')
+
+    for ims in progress.bar(imnames, hide=not verbose):
         img = imread_resize(ims, maxdim) # read in and resize the image
         
         # Extract patches and map to grayscale if necessary
@@ -70,8 +74,8 @@ def training_patches (imnames, npatches, psize, maxdim=None, colour=False):
 def grid_patches (image, psize, pstride):
     """ Extract a grid of (overlapping) patches from an image
 
-    This function extracts square patches from an image in an potentially
-    overlapping, dense grid. 
+    This function extracts square patches from an image in an overlapping, dense
+    grid. 
 
     Arguments:
         image: np.array (rows, cols, channels) of an image (in memory)

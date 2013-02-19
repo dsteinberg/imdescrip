@@ -16,4 +16,4 @@ filelist = glob.glob(imgdir + '*.jpg')
 with open('sc.p', 'rb') as f:
     desc = pk.load(f)
 
-extractor(filelist, savdir, desc) 
+extractor(filelist, savdir, desc, verbose=True) 

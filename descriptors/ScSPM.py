@@ -53,7 +53,7 @@ class ScSPM (Descriptor):
         scpatch = np.transpose(omp(self.dic_gram, np.dot(self.dic, patches.T), 
                                 self.active))
 
-        ## Pyramid pooling and normalisation
+        # Pyramid pooling and normalisation
         fea = pch.pyramid_pooling(scpatch, cx, cy, img.shape, self.levels)
         fea = fea / math.sqrt((fea**2).sum() + 1e-10)
 
@@ -68,7 +68,8 @@ class ScSPM (Descriptor):
         """
 
         # Get SIFT training patches 
-        patches = sw.training_patches(images, npatches, self.psize, self.maxdim)
+        patches = sw.training_patches(images, npatches, self.psize, self.maxdim,
+                                        verbose=True)
           
         # Learn dictionary
         print('Learning K-means dictionary...')

@@ -1,3 +1,20 @@
+""" Functions for extracting dense SIFT patches from images.
+
+    This file has a few useful functions for extracting and processing scale
+    invariant feature transform (SIFT) patches from images. This module
+    essentially wraps the vlfeat DSIFT python routines.
+    
+    Author: Daniel Steinberg
+            Australian Centre for Field Robotics
+            University of Sydney
+
+    Date:   19/02/2012
+
+    TODO:   Cut out the middle man, make this interface with the c++ vl_feat
+            direct OR write better python wrappers.
+
+"""
+
 import math
 import numpy as np
 from skimage.color import rgb2gray
@@ -6,7 +23,7 @@ from vlfeat import vl_dsift
 from image import imread_resize
 
 
-def training_patches (imnames, npatches, psize, maxdim=None):
+def training_patches (imnames, npatches, psize, maxdim=None, verbose=False):
     """ Extract SIFT patches from images for dictionary training
 
     Arguments:
@@ -15,6 +32,7 @@ def training_patches (imnames, npatches, psize, maxdim=None):
         maxdim: The maximum dimension of the image in pixels. The image is
             rescaled if it is larger than this. By default there is no scaling. 
         psize: A int of the size of the square patches to extract
+        verbose: bool, print progress bar
 
     Returns:
         An np.array (npatches, 128) of SIFT descriptors. NOTE, the actual 
@@ -27,8 +45,10 @@ def training_patches (imnames, npatches, psize, maxdim=None):
     plist = []
     bsize = __patch2bin(psize)
 
-    print('Extracting SIFT patches from images...')
-    for ims in progress.bar(imnames):
+    if verbose == True:
+        print('Extracting SIFT patches from images...')
+
+    for ims in progress.bar(imnames, hide=~verbose):
         
         # Read in and resize the image -- convert to gray if needed
         img = imread_resize(ims, maxdim) 
@@ -46,7 +66,21 @@ def training_patches (imnames, npatches, psize, maxdim=None):
 
 
 def DSIFT_patches (image, psize, pstride):
-    """ Extract dense SIFT descriptors from an image.
+    """ Extract a grid of (overlapping) SIFT patches from an image
+
+    This function extracts SIFT descriptors from square patches in an
+    overlapping, dense grid from an image. 
+
+    Arguments:
+        image: np.array (rows, cols, channels) of an image (in memory)
+        psize: int the size of the square patches to extract, in pixels.
+        pstride: int the stride (in pixels) between successive patches.
+
+    Returns:
+        patches: np.array (npatches, 128) SIFT descriptors for each patch
+        centresx: np.array (npatches) the centres (column coords) of the patches
+        centresy: np.array (npatches) the centres (row coords) of the patches
+
     """
 
     if image.ndim > 2:

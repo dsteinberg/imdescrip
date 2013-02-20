@@ -5,19 +5,15 @@ A collection of python tools for extracting descriptors from images (whole and
 sub-image descriptors).
 
 
-Author: Daniel Steinberg
-        Australian Centre for Field Robotics
-        The University of Sydney
+*Author*: Daniel Steinberg
 
-Date:   20/02/2013
+*Institute*: Australian Centre for Field Robotics, The University of Sydney
 
-License: GPL v3 (See LICENSE)
+*Date*: 20/02/2013
 
+*License*: GPL v3 (See LICENSE)
 
-**If you use this package please consider citing [2]**
-
-References:
-
+*References*:
 
  [1] Yang, J.; Yu, K.; Gong, Y. & Huang, T. Linear spatial pyramid matching
      using sparse coding for image classification Computer Vision and Pattern
@@ -25,6 +21,8 @@ References:
 
  [2] D. M. Steinberg, An Unsupervised Approach to Modelling Visual Data, PhD
      Thesis, 2013.
+
+**If you use this package please consider citing [2]**
 
 
 Functionality

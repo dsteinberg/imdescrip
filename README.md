@@ -14,7 +14,7 @@ Date:   20/02/2013
 License: GPL v3 (See LICENSE)
 
 
-*If you use this package please consider citing [2]*
+**If you use this package please consider citing [2]**
 
 References:
 
@@ -98,10 +98,10 @@ Usage
 Have a look at "example\_extract.py" for some usage examples, and how I would
 use the ScSPM descriptor. Typically a work flow consists of:
 
-1) Instantiating and training a descriptor object (e.g. ScSPM)
-2) Saving this object with pickle.
-3) Loading this descriptor object when a dataset needs to be processed.
-4) Calling an extractor routine with this descriptor object on a list of images.
+1. Instantiating and training a descriptor object (e.g. ScSPM)
+2. Saving this object with pickle.
+3. Loading this descriptor object when a dataset needs to be processed.
+4. Calling an extractor routine with this descriptor object on a list of images.
 
 Of course (2) and (3) are optional, but save unnecessary ScSPM dictionary
 training.

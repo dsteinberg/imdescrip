@@ -89,6 +89,10 @@ thought you may have more luck using a maintained package for your system.
 
 This has not been tested on a Windows or Mac system (only Ubuntu Linux)
 
+NOTE: I had difficulty with pyvlfeat being essentially un-maintained, and so
+this would not install without error on Ubuntu 12.04. I have instructions in the
+requirements.txt file for getting this working.
+
 
 Usage
 -----
@@ -109,5 +113,5 @@ TODO
 ----
 
 * Parallelise descriptor extraction.
-* Re-write the python interface for vlfeat DSIFT
+* Re-write the python interface for vlfeat DSIFT (pyvlfeat is unmaintained)
 * Make image resizing faster

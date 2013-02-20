@@ -1,15 +1,21 @@
-# In the Ubuntu/Debian repos
-scipy
-numpy
-matplotlib
-cython
-libboost_python
+# Some packages commented out are best got using your system package
+#   tool/distribution. Only use pip for these if you must  
 
-# Use pip
-scikit-learn==0.13
+#scipy
+#numpy
+#matplotlib
+#cython
+#libboost_python
+scikit-learn>=0.13
 scikit-image
 clint
+pyvlfeat 
 
-# May need a bit of manual tweaking
-pyvlfeat (manual download, change dep libboost-python-mt-2.6 to 2.7, pip install
--e)
+# NOTE: for pyvlfeat I had to manually download this from pypi and change the
+#   setup.py entry:
+#
+#       LinkArgs = ['-msse', '-shared', '-lboost_python-mt-py26']
+#   to
+#       LinkArgs = ['-msse', '-shared', '-lboost_python-mt-py27']
+#
+#   Then I could install this using "pip install -e [path to download]".

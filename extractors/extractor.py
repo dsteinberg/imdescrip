@@ -1,4 +1,20 @@
-# Image Descriptor Extraction Module
+# Imdescrip -- a collection of tools to extract descriptors from images.
+# Copyright (C) 2013  Daniel M. Steinberg (d.steinberg@acfr.usyd.edu.au)
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+""" Module for single threaded image descriptor extraction. """
 
 import os
 import cPickle as pk
@@ -10,7 +26,7 @@ def extractor (filelist, savedir, descobj, verbose=False):
     This function calls an image descripor object on a batch of imaged in order
     to extract the images descripor. If a feature/descriptor file already exists
     for the image, it is skipped.
-    
+
     Arguments:
         filelist: A list of files of image names including their paths of images
                   to read and extract descriptors from
@@ -23,13 +39,20 @@ def extractor (filelist, savedir, descobj, verbose=False):
                   descriptors.Descriptor for an abstract base class. 
         verbose:  bool, display progress?
 
+    Note: If there is a problem extracting any image descriptors, a file
+        "errors.log" is created in the savedir directory with a list of file
+        names, error number and messages.
+
     """
 
     # Try to make the save path
     if not os.path.exists(savedir):
         os.mkdir(savedir)
 
-    # Iterate through all of the images in filelist and extract features
+    errlog = os.path.join(savedir, 'errors.log')
+    errflag = False
+
+        # Iterate through all of the images in filelist and extract features
     if verbose == True:
         print('Extracting image descriptors...')
 
@@ -43,11 +66,18 @@ def extractor (filelist, savedir, descobj, verbose=False):
             continue
 
         # Extract image descriptors
-        fea = descobj.extract(impath) # extract image descriptor
+        try:
+            fea = descobj.extract(impath) # extract image descriptor
+        except Exception as e:
+            with open(errlog, 'a') as l:
+                l.write(impath + ' : ' + format(e.errno, e.strerror) + '\n')
+            continue
    
         # Write pickled feature
         with open(feafile, 'wb') as f:
             pk.dump(fea, f, protocol=2)
     
-    if verbose == True:
+    if (verbose == True) and (errflag == False):
         print('done!')
+    elif errflag == True:
+        print('done with errors. See the "errors.log" file in ' + savedir)

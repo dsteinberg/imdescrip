@@ -1,3 +1,19 @@
+# Imdescrip -- a collection of tools to extract descriptors from images.
+# Copyright (C) 2013  Daniel M. Steinberg (d.steinberg@acfr.usyd.edu.au)
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 """ Functions for extracting, processing and displaying image patches.
     
     This file has a few useful functions for extracting and processing patches
@@ -11,12 +27,6 @@
     [1] Yang, J.; Yu, K.; Gong, Y. & Huang, T. Linear spatial pyramid matching 
         using sparse coding for image classification Computer Vision and Pattern 
         Recognition, 2009. CVPR 2009. IEEE Conference on, 2009, 1794-1801
-
-    Author: Daniel Steinberg
-            Australian Centre for Field Robotics
-            University of Sydney
-
-    Date:   13/02/2012
 
 """
 
@@ -56,7 +66,7 @@ def training_patches (imnames, npatches, psize, maxdim=None, colour=False,
     if verbose == True:
         print('Extracting patches from images...')
 
-    for ims in progress.bar(imnames, hide=not verbose):
+    for ims in progress.bar(imnames, hide=(not verbose)):
         img = imread_resize(ims, maxdim) # read in and resize the image
         
         # Extract patches and map to grayscale if necessary

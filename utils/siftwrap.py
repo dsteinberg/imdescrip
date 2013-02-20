@@ -1,14 +1,26 @@
+# Imdescrip -- a collection of tools to extract descriptors from images.
+# Copyright (C) 2013  Daniel M. Steinberg (d.steinberg@acfr.usyd.edu.au)
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 """ Functions for extracting dense SIFT patches from images.
 
     This file has a few useful functions for extracting and processing scale
     invariant feature transform (SIFT) patches from images. This module
     essentially wraps the vlfeat DSIFT python routines.
     
-    Author: Daniel Steinberg
-            Australian Centre for Field Robotics
-            University of Sydney
-
-    Date:   19/02/2012
+    NOTE:   The SIFT descriptors output by vlfeat are [0, 255] integers!
 
     TODO:   Cut out the middle man, make this interface with the c++ vl_feat
             direct OR write better python wrappers.
@@ -38,6 +50,9 @@ def training_patches (imnames, npatches, psize, maxdim=None, verbose=False):
         An np.array (npatches, 128) of SIFT descriptors. NOTE, the actual 
         npatches found may be slightly more or less than that input.
 
+    Note:   
+        The SIFT descriptors output by vlfeat are [0, 255] integers!
+
     """
 
     nimg = len(imnames)
@@ -48,7 +63,7 @@ def training_patches (imnames, npatches, psize, maxdim=None, verbose=False):
     if verbose == True:
         print('Extracting SIFT patches from images...')
 
-    for ims in progress.bar(imnames, hide=~verbose):
+    for ims in progress.bar(imnames, hide=(not verbose)):
         
         # Read in and resize the image -- convert to gray if needed
         img = imread_resize(ims, maxdim) 
@@ -80,6 +95,9 @@ def DSIFT_patches (image, psize, pstride):
         patches: np.array (npatches, 128) SIFT descriptors for each patch
         centresx: np.array (npatches) the centres (column coords) of the patches
         centresy: np.array (npatches) the centres (row coords) of the patches
+
+    Note:
+        The SIFT descriptors output by vlfeat are [0, 255] integers!
 
     """
 

@@ -1,3 +1,11 @@
+# These need to be installed using the package manager/system packages
+
+# libboost_python
+# libatlas-dev
+# libatlas-base-dev
+# libatlas3gf-base
+
+
 # Some packages commented out are best got using your system package
 #   tool/distribution. Only use pip for these if you must  
 
@@ -5,11 +13,13 @@
 #numpy
 #matplotlib
 #cython
-#libboost_python
+#spams>=2.2
+
 scikit-learn>=0.13
 scikit-image
 clint
 pyvlfeat 
+
 
 # NOTE: for pyvlfeat I had to manually download this from pypi and change the
 #   setup.py entry:
@@ -18,4 +28,10 @@ pyvlfeat
 #   to
 #       LinkArgs = ['-msse', '-shared', '-lboost_python-mt-py27']
 #
-#   Then I could install this using "pip install -e [path to download]".
+#   Then I could install this using "sudo pip install -e [path to download]".
+#
+# NOTE2: spams is a manual install: 
+#   
+#   1) get the code from: http://spams-devel.gforge.inria.fr/index.html
+#   2) install the libatlas dependencies
+#   3) sudo pip install -e [download dir]

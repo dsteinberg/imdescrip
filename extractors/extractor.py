@@ -16,8 +16,6 @@
 
 """ Module for image descriptor extraction. """
 
-#TODO: Seems to be a bug where existing files are overwritten OR there is just a
-#   thread sync error -- it takes long if files exist or it may recalculate them 
 
 import os, itertools, sys, cPickle, time
 import multiprocessing as mp
@@ -40,7 +38,7 @@ def extract (imfile, savedir, descobj):
         fea = descobj.extract(imfile) # extract image descriptor
     except Exception as e:
         with open(os.path.join(savedir, 'errors.log'), 'a') as l:
-            l.write(imfile + ' : ' + format(e.errno, e.strerror) + '\n')
+            l.write('{0} : {1}\n'.format(imfile, e))
         return True
 
     # Write pickled feature
@@ -51,11 +49,11 @@ def extract (imfile, savedir, descobj):
 
 
 def extract_batch (filelist, savedir, descobj, verbose=False):
-    """ Extract features/descriptors from a batch of images. 
+    """ Extract features/descriptors from a batch of images. Single threaded. 
 
     This function calls an image descripor object on a batch of imaged in order
     to extract the images descripor. If a feature/descriptor file already exists
-    for the image, it is skipped.
+    for the image, it is skipped. This is a single-threaded pipeline.
 
     Arguments:
         filelist: A list of files of image names including their paths of images

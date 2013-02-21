@@ -76,6 +76,8 @@ package), such as Scipy and Numpy.
 Installation
 ------------
 
+See requirements.txt for details.
+
 Largely up to you -- there are some executable scripts that can be run from the
 root package folder, or you can add this to the python path.
 
@@ -112,6 +114,7 @@ training.
 TODO
 ----
 
-* Parallelise descriptor extraction.
+* Update install instructions when I've tried it out on a new machine
+* Remove some dependencies (clint and sklearn) 
 * Re-write the python interface for vlfeat DSIFT (pyvlfeat is unmaintained)
 * Make image resizing faster

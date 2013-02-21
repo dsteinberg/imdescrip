@@ -19,27 +19,27 @@
 import glob 
 import cPickle as pk
 from extractors.extractor import extract_smp
-#from descriptors.ScSPM import ScSPM
+from descriptors.ScSPM import ScSPM
 
 # Make a list of images
-#imgdir   = '/home/dsteinberg/Datasets/Tas2008_5/Images/'
-#savdir   = '/home/dsteinberg/Datasets/Tas2008_5/Images/imdesc2/'
-#filelist = glob.glob(imgdir + '*.png') 
+imgdir   = '/home/dsteinberg/Datasets/Tas2008_5/Images/'
+savdir   = '/home/dsteinberg/Datasets/Tas2008_5/Images/imdesc2/'
+filelist = glob.glob(imgdir + '*.png') 
 
-imgdir   = '/home/dsteinberg/Datasets/outdoor_scenes/images_40ea/'
-savdir   = '/home/dsteinberg/Datasets/outdoor_scenes/images_40ea/imdesc/'
-filelist = glob.glob(imgdir + '*.jpg') 
+#imgdir   = '/home/dsteinberg/Datasets/outdoor_scenes/Images/'
+#savdir   = '/home/dsteinberg/Datasets/outdoor_scenes/Images/imdesc/'
+#filelist = glob.glob(imgdir + '*.jpg') 
 
 # Train a dictionary
-#desc = ScSPM(dsize=512, compress_dim=3000)
-#desc.learn_dictionary(filelist, 50000)
+desc = ScSPM(dsize=256, compress_dim=3000)
+desc.learn_dictionary(filelist, 50000)
 
 # Save the dictionary
-#with open('sc_auv2.p', 'wb') as f:
-    #pk.dump(desc, f, protocol=2)
+with open('sc_auv_256.p', 'wb') as f:
+    pk.dump(desc, f, protocol=2)
 
 # OR Load a pre-learned dictionary 
-with open('sc_auv.p', 'rb') as f:
-    desc = pk.load(f)
+#with open('sc_out.p', 'rb') as f:
+    #desc = pk.load(f)
 
 extract_smp(filelist, savdir, desc, verbose=True) 

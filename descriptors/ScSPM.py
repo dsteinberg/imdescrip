@@ -16,9 +16,9 @@
 
 """ A modified implementation of Yang et. al.'s ScSPM image descriptor [1]. """
 
-import math, warnings
+import math
 import numpy as np
-from sklearn.linear_model import orthogonal_mp_gram as omp
+from spams import omp
 from sklearn.cluster import KMeans
 from utils import patch as pch, siftwrap as sw
 from descriptor import Descriptor
@@ -74,6 +74,10 @@ class ScSPM (Descriptor):
         [2] Davenport, M. A.; Duarte, M. F.; Eldar, Y. C. & Kutyniok, G.
             Introduction to compressed sensing Chapter 1 Compressed Sensing:
             Theory and Applications, Cambridge University Press, 2011, 93
+        
+
+        TODO: Swap K-means for the dictionary learning method in SPAMS to reduce
+              dependencies, maybe it's faster too?
 
     """
 
@@ -88,7 +92,6 @@ class ScSPM (Descriptor):
         self.dsize = dsize
         self.compress_dim = compress_dim
         self.dic = None       # Sparse code dictionary (D)
-        self.dic_gram = None  # Sparse code dictionary gram matrix (D * D.T)
         
         if self.compress_dim is not None:
             D = np.sum(np.array(levels)**2) * self.dsize
@@ -122,11 +125,9 @@ class ScSPM (Descriptor):
         # Extract SIFT patches
         patches, cx, cy = sw.DSIFT_patches(img, self.psize, self.pstride)
 
-        # Get OMP codes (complains about linear dependence in dic - but it's ok)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", RuntimeWarning)
-            scpatch = np.transpose(omp(self.dic_gram, 
-                                    np.dot(self.dic, patches.T), self.active))
+        # Get OMP codes 
+        scpatch = np.transpose(omp(np.asfortranarray(patches.T, np.float64), 
+                                self.dic, self.active, numThreads=1).todense())
 
         # Pyramid pooling and normalisation
         fea = pch.pyramid_pooling(scpatch, cx, cy, img.shape, self.levels)
@@ -168,6 +169,6 @@ class ScSPM (Descriptor):
         print('done')
 
         # Normalise and save the dictionary
-        self.dic = pch.norm_patches(sdic.cluster_centers_)
-        self.dic_gram = np.dot(self.dic, self.dic.T)
+        self.dic = np.asfortranarray(pch.norm_patches(sdic.cluster_centers_).T,
+                                     np.float64)
         

@@ -34,9 +34,9 @@ sub-folder/package.
 
 ### descriptors:
 
-Actual classes for extracting descriptors/features from images. For instance,
-a modified versions of Yang et. al.'s sparse code spatial pyramid matching
-(ScSPM) [1] is implemented here. Also provided is an abstract base class for
+Actual classes for extracting descriptors/features from images. For instance, a
+modified versions of Yang et. al.'s sparse code spatial pyramid matching (ScSPM)
+[1] descriptor is implemented here. Also provided is an abstract base class for
 implementing new descriptor classes that work with the extractor model.
 
 

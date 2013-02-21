@@ -16,7 +16,7 @@
 
 """ A modified implementation of Yang et. al.'s ScSPM image descriptor [1]. """
 
-import math
+import math, warnings
 import numpy as np
 from sklearn.linear_model import orthogonal_mp_gram as omp
 from sklearn.cluster import KMeans
@@ -122,9 +122,11 @@ class ScSPM (Descriptor):
         # Extract SIFT patches
         patches, cx, cy = sw.DSIFT_patches(img, self.psize, self.pstride)
 
-        # Get OMP codes
-        scpatch = np.transpose(omp(self.dic_gram, np.dot(self.dic, patches.T), 
-                                self.active))
+        # Get OMP codes (complains about linear dependence in dic - but it's ok)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", RuntimeWarning)
+            scpatch = np.transpose(omp(self.dic_gram, 
+                                    np.dot(self.dic, patches.T), self.active))
 
         # Pyramid pooling and normalisation
         fea = pch.pyramid_pooling(scpatch, cx, cy, img.shape, self.levels)

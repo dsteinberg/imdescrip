@@ -58,7 +58,7 @@ Various utilities used by the other modules. These include:
   training dictionaries.
 * patch centring and contrast normalisation.
 * image reading and resizing in a single routine.
-
+* a simple progress bar -- mainly included to remove some package dependencies
 
 ### test:
 
@@ -115,6 +115,5 @@ TODO
 ----
 
 * Update install instructions when I've tried it out on a new machine
-* Remove some dependencies (clint and sklearn) 
+* Remove some dependencies (skimge and sklearn) 
 * Re-write the python interface for vlfeat DSIFT (pyvlfeat is unmaintained)
-* Make image resizing faster

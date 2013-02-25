@@ -30,9 +30,9 @@
 import math
 import numpy as np
 from skimage.color import rgb2gray
-from clint.textui import progress
 from vlfeat import vl_dsift
 from image import imread_resize
+from progress import Progress
 
 
 def training_patches (imnames, npatches, psize, maxdim=None, verbose=False):
@@ -63,7 +63,11 @@ def training_patches (imnames, npatches, psize, maxdim=None, verbose=False):
     if verbose == True:
         print('Extracting SIFT patches from images...')
 
-    for ims in progress.bar(imnames, hide=(not verbose)):
+    # Set up progess updates
+    progbar = Progress(nimg, title='Extracting patches', verbose=verbose)
+
+    # Get patches 
+    for i, ims in enumerate(imnames): 
         
         # Read in and resize the image -- convert to gray if needed
         img = imread_resize(ims, maxdim) 
@@ -74,9 +78,11 @@ def training_patches (imnames, npatches, psize, maxdim=None, verbose=False):
         spaceing = int(math.floor(math.sqrt(float(np.prod(img.shape))/ppeimg)))
         xy, desc = vl_dsift(np.float32(img), step=spaceing, size=bsize)
         plist.append(desc.T)
+        
+        progbar.update(i)
 
+    progbar.finished()
     patches = np.concatenate(plist, axis=0)
-
     return np.reshape(patches, (patches.shape[0], np.prod(patches.shape[1:])))
 
 

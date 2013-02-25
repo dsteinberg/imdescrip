@@ -35,10 +35,9 @@ import numpy as np
 from sklearn.feature_extraction.image import extract_patches_2d
 from skimage.color import rgb2gray
 from scipy.misc import toimage
-from clint.textui import progress
 from matplotlib import pyplot as plt
 from image import imread_resize
-
+from progress import Progress
 
 def training_patches (imnames, npatches, psize, maxdim=None, colour=False,
                         verbose=False):
@@ -63,10 +62,10 @@ def training_patches (imnames, npatches, psize, maxdim=None, colour=False,
     ppeimg = int(round(float(npatches)/nimg))
     plist = []
 
-    if verbose == True:
-        print('Extracting patches from images...')
+    # Set up progess updates
+    progbar = Progress(nimg, title='Extracting patches', verbose=verbose)
 
-    for ims in progress.bar(imnames, hide=(not verbose)):
+    for i, ims in enumerate(imnames):
         img = imread_resize(ims, maxdim) # read in and resize the image
         
         # Extract patches and map to grayscale if necessary
@@ -76,8 +75,10 @@ def training_patches (imnames, npatches, psize, maxdim=None, colour=False,
         else:
             plist.append(extract_patches_2d(img, (psize, psize), ppeimg))
 
-    patches = np.concatenate(plist, axis=0)
+        progbar.update(i)
 
+    progbar.finished()
+    patches = np.concatenate(plist, axis=0)
     return np.reshape(patches, (patches.shape[0], np.prod(patches.shape[1:])))
 
 

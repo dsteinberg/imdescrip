@@ -21,6 +21,7 @@ import os, itertools, cPickle, time
 import multiprocessing as mp
 from utils.progress import Progress
 
+
 def extract (imfile, savedir, descobj):
     """ Extract features/descriptors from a single image.
 
@@ -68,7 +69,7 @@ def extract (imfile, savedir, descobj):
 
 
 def extract_batch (filelist, savedir, descobj, verbose=False):
-    """ Extract features/descriptors from a batch of images. Single threaded. 
+    """ Extract features/descriptors from a batch of images. Single-threaded. 
 
     This function calls an image descripor object on a batch of images in order
     to extract the images descripor. If a feature/descriptor file already exists
@@ -117,11 +118,38 @@ def extract_batch (filelist, savedir, descobj, verbose=False):
 
 def __extract_star (args):
     """ Covert args to (file, savedir, descobj) arguments. """
+
     return extract(*args)
 
 
 def extract_smp (filelist, savedir, descobj, njobs=None, verbose=False):
-    """
+    """ Extract features/descriptors from a batch of images. Multi-threaded. 
+
+    This function calls an image descripor object on a batch of images in order
+    to extract the images descripor. If a feature/descriptor file already exists
+    for the image, it is skipped. This is a multi-threaded (SMP) pipeline
+    suitable for running on a single computer.
+
+    Arguments:
+        filelist: A list of files of image names including their paths of images
+                  to read and extract descriptors from
+        savedir:  A directory in which to save all of the image features. They
+                  are pickled objects (protocol 2) with the same name as the
+                  image file. The object that is pickled is the return from
+                  descobj.extract().
+        decobj:   An image descriptor object which does the actual extraction
+                  work. the method called is descobj.extract(image). See
+                  descriptors.Descriptor for an abstract base class. 
+        njobs:    int, Number of threads to use. If None, then the number of
+                  threads is chosen to be the same as the number of cores.
+        verbose:  bool, display progress?
+
+    Returns:
+        True if there we any errors extracting image features. False otherwise. 
+        If there is a problem extracting any image descriptors, a file
+        "errors.log" is created in the savedir directory with a list of file
+        names, error number and messages.
+
     """
 
     # Try to make the save path

@@ -13,14 +13,13 @@
 #numpy
 #matplotlib
 #cython
-#spams>=2.2
+#spams>=2.2     # See NOTE2
 
-scikit-learn>=0.13
 scikit-image
-pyvlfeat 
+pyvlfeat    # See NOTE1 
 
 
-# NOTE: for pyvlfeat I had to manually download this from pypi and change the
+# NOTE1: for pyvlfeat I had to manually download this from pypi and change the
 #   setup.py entry:
 #
 #       LinkArgs = ['-msse', '-shared', '-lboost_python-mt-py26']

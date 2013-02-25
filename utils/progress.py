@@ -25,7 +25,7 @@ class Progress ():
     the dependencies on external libraries which do a superset of what is
     required.
 
-    The way this is typically used is
+    The way this class is typically used is
 
         #Set up code
         ...

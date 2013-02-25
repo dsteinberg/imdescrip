@@ -16,10 +16,10 @@
 
 """ A modified implementation of Yang et. al.'s ScSPM image descriptor [1]. """
 
+
 import math
 import numpy as np
-from spams import omp
-from sklearn.cluster import KMeans
+from spams import omp, trainDL
 from utils import patch as pch, siftwrap as sw
 from descriptor import Descriptor
 
@@ -30,9 +30,11 @@ class ScSPM (Descriptor):
         This class implements a modified version of Yang et. al.'s sparse code
         spatial pyramid match (ScSPM) image descriptor [1]. While the original
         descripor uses sparse code (lasso) dictionaries and image encoding, this
-        uses K-means dictionaries and orthogonal matching persuit (OMP)
+        uses sparse code dictionaries and orthogonal matching persuit (OMP)
         encoding. Some classification performance is lost when using OMP, but it
-        is far more scalable to a large number of images. 
+        is far more scalable to a large number of images. The excellent SPAMs
+        library used for [2] is used for the sparse coding and OMP in this
+        module. 
         
         In addition to this scalability modification, there is an option to save
         compressed ScSPM descriptors instead of the original large-dimensional
@@ -71,14 +73,14 @@ class ScSPM (Descriptor):
             Vision and Pattern Recognition, 2009. CVPR 2009. IEEE Conference on,
             2009, 1794-1801
 
-        [2] Davenport, M. A.; Duarte, M. F.; Eldar, Y. C. & Kutyniok, G.
+        [2] Mairal, J.; Bach, F.; Ponce,J.; & Sapiro, G. Online Dictionary 
+            Learning for Sparse Coding, Internationl Conference on Machine
+            Learning (ICML), 2009.
+
+        [3] Davenport, M. A.; Duarte, M. F.; Eldar, Y. C. & Kutyniok, G.
             Introduction to compressed sensing Chapter 1 Compressed Sensing:
             Theory and Applications, Cambridge University Press, 2011, 93
         
-
-        TODO: Swap K-means for the dictionary learning method in SPAMS to reduce
-              dependencies, maybe it's faster too?
-
     """
 
     def __init__ (self, maxdim=320, psize=16, pstride=8, active=10, dsize=1024,
@@ -139,19 +141,19 @@ class ScSPM (Descriptor):
             return fea
         
 
-    def learn_dictionary (self, images, npatches=50000, ntrials=1, njobs=-1):
-        """ Learn a K-means dictionary for this ScSPM.
+    def learn_dictionary (self, images, npatches=50000, niter=1000, njobs=-1):
+        """ Learn a Sparse Code dictionary for this ScSPM.
 
-        This method trains a K-means dictionary for the ScSPM descriptor object.
-        This only needs to be run once before multiple calls to the extract()
-        method can be made.
+        This method trains a sparse codes dictionary for the ScSPM descriptor
+        object. This only needs to be run once before multiple calls to the
+        extract() method can be made.
 
         Arguments:
             images: list, a list of paths to images to use for training.
             npatches: int (default 50000) number of SIFT patches to extract from
                 the images to use for training the dictionary.
-            ntrials: int (default 1), the number of random starts of K-means to
-                do. The best run will be chosen for the dictionary.
+            niter: int (default 1000), the number of iterations of dictionary
+                learning (Lasso) to perform.
             njobs: int (default -1), the number of threads to use. -1 means the
                 number of threads will be equal to the number of cores.
 
@@ -160,15 +162,10 @@ class ScSPM (Descriptor):
         # Get SIFT training patches 
         patches = sw.training_patches(images, npatches, self.psize, self.maxdim,
                                         verbose=True)
+        patches = pch.norm_patches(patches)
           
         # Learn dictionary
-        print('Learning K-means dictionary...')
-        sdic = KMeans(n_clusters=self.dsize, verbose=True, n_init=ntrials,
-                n_jobs=njobs)
-        sdic.fit(patches)
+        print('Learning dictionary...')
+        self.dic = trainDL(np.asfortranarray(patches.T, np.float64), mode=0,
+                       K=self.dsize, lambda1=0.15, iter=niter, numThreads=njobs)
         print('done')
-
-        # Normalise and save the dictionary
-        self.dic = np.asfortranarray(pch.norm_patches(sdic.cluster_centers_).T,
-                                     np.float64)
-        

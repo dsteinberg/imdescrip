@@ -178,9 +178,6 @@ def extract_smp (filelist, savedir, descobj, njobs=None, verbose=False):
         print('Done, with errors. See the "errors.log" file in ' + savedir)
 
 
-#def extract_manager (filelist, savedir, descobj, verbose=False):
-
-
 def __extract_star (args):
     """ Covert args to (file, savedir, descobj) arguments. """
 

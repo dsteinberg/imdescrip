@@ -65,35 +65,47 @@ Various utilities used by the other modules. These include:
 Unit tests for this package.
 
 
-Dependencies
+Dependencies and Installation
 ------------
 
-See requirements.txt. Some of the requirements are commented out just because
-they are pretty common with a python install (at least for likely users of this
-package), such as Scipy and Numpy.
+This package has the following dependencies:
 
+Common python libraries (probably pre-compiled/packaged for all OSes)
+* scipy
+* numpy
+* matplotlib
+* cython            (scikit-image)
+* libatlas-dev      (spams)
+* libatlas-base-dev (spams)
+* libatlas3gf-base  (spams)
+* libboost\_python  (pyvlfeat)
 
-Installation
-------------
+May require pip
+* scikit-image (can use pip)
 
-See requirements.txt for details.
+Manual install
+* spams (>=2.2)
+* pyvlfeat
 
-Largely up to you -- there are some executable scripts that can be run from the
-root package folder, or you can add this to the python path.
+Once all of these dependencies have been installed, this package can simply be
+placed in your python path.
 
-Pip should handle most of the dependencies:
-    
-    # pip install -r requirements.txt
+### Notes
 
-Where '#' means super-user (use sudo for Ubuntu). Just note that some of the
-more common dependencies are commented out. These can be installed with pip,
-thought you may have more luck using a maintained package for your system.
+For pyvlfeat I had to manually download this from pypi and change the setup.py
+entry:
 
-This has not been tested on a Windows or Mac system (only Ubuntu Linux)
+        LinkArgs = ['-msse', '-shared', '-lboost_python-mt-py26']
+to
+        LinkArgs = ['-msse', '-shared', '-lboost_python-mt-py27']
 
-NOTE: I had difficulty with pyvlfeat being essentially un-maintained, and so
-this would not install without error on Ubuntu 12.04. I have instructions in the
-requirements.txt file for getting this working.
+Then I could install this using "sudo pip install [download diectory]".
+
+Also spams is a manual install: 
+  
+  1. get the code from: http://spams-devel.gforge.inria.fr/index.html
+  2. install the libatlas dependencies
+  3. sudo pip install [download dir]
 
 
 Usage
@@ -115,5 +127,5 @@ TODO
 ----
 
 * Update install instructions when I've tried it out on a new machine
-* Remove some dependencies (skimge) 
+* Remove some dependencies (skimge, matplotlib - make optional) 
 * Re-write the python interface for vlfeat DSIFT (pyvlfeat is unmaintained)

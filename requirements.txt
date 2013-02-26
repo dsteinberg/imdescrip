@@ -26,10 +26,10 @@ pyvlfeat    # See NOTE1
 #   to
 #       LinkArgs = ['-msse', '-shared', '-lboost_python-mt-py27']
 #
-#   Then I could install this using "sudo pip install -e [path to download]".
+#   Then I could install this using "sudo pip install [path to download]".
 #
 # NOTE2: spams is a manual install: 
 #   
 #   1) get the code from: http://spams-devel.gforge.inria.fr/index.html
 #   2) install the libatlas dependencies
-#   3) sudo pip install -e [download dir]
+#   3) sudo pip install [download dir]

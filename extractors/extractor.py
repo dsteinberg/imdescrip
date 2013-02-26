@@ -116,12 +116,6 @@ def extract_batch (filelist, savedir, descobj, verbose=False):
         print('Done with errors. See the "errors.log" file in ' + savedir)
 
 
-def __extract_star (args):
-    """ Covert args to (file, savedir, descobj) arguments. """
-
-    return extract(*args)
-
-
 def extract_smp (filelist, savedir, descobj, njobs=None, verbose=False):
     """ Extract features/descriptors from a batch of images. Multi-threaded. 
 
@@ -169,7 +163,8 @@ def extract_smp (filelist, savedir, descobj, njobs=None, verbose=False):
 
     # Get the status
     while ((result.ready() is not True) and (verbose == True)):
-        progbar.update(nfiles - result._number_left * result._chunksize)
+        approx_rem = nfiles - result._number_left * result._chunksize
+        progbar.update(max(0, approx_rem)) 
         time.sleep(5)
 
     progbar.finished()
@@ -181,3 +176,12 @@ def extract_smp (filelist, savedir, descobj, njobs=None, verbose=False):
 
     if errflag == True:
         print('Done, with errors. See the "errors.log" file in ' + savedir)
+
+
+#def extract_manager (filelist, savedir, descobj, verbose=False):
+
+
+def __extract_star (args):
+    """ Covert args to (file, savedir, descobj) arguments. """
+
+    return extract(*args)

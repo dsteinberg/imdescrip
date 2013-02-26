@@ -115,5 +115,5 @@ TODO
 ----
 
 * Update install instructions when I've tried it out on a new machine
-* Remove some dependencies (skimge and sklearn) 
+* Remove some dependencies (skimge) 
 * Re-write the python interface for vlfeat DSIFT (pyvlfeat is unmaintained)

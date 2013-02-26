@@ -81,7 +81,7 @@ Common python libraries (probably pre-compiled/packaged for all OSes)
 * libboost\_python  (pyvlfeat)
 
 May require pip
-* scikit-image (can use pip)
+* scikit-image
 
 Manual install
 * spams (>=2.2)
@@ -95,11 +95,14 @@ placed in your python path.
 For pyvlfeat I had to manually download this from pypi and change the setup.py
 entry:
 
-        LinkArgs = ['-msse', '-shared', '-lboost_python-mt-py26']
+    LinkArgs = ['-msse', '-shared', '-lboost_python-mt-py26']
 to
-        LinkArgs = ['-msse', '-shared', '-lboost_python-mt-py27']
 
-Then I could install this using "sudo pip install [download diectory]".
+    LinkArgs = ['-msse', '-shared', '-lboost_python-mt-py27']
+
+Then I could install this using 
+
+    sudo pip install [download diectory]
 
 Also spams is a manual install: 
   

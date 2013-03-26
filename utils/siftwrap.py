@@ -29,9 +29,8 @@
 
 import math
 import numpy as np
-from skimage.color import rgb2gray
 from vlfeat import vl_dsift
-from image import imread_resize
+from image import imread_resize, rgb2gray
 from progress import Progress
 
 

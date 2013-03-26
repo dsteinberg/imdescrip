@@ -73,15 +73,11 @@ This package has the following dependencies:
 Common python libraries (probably pre-compiled/packaged for all OSes)
 * scipy
 * numpy
-* matplotlib
-* cython            (scikit-image)
+* matplotlib        (optional)
 * libatlas-dev      (spams)
 * libatlas-base-dev (spams)
 * libatlas3gf-base  (spams)
 * libboost\_python  (pyvlfeat)
-
-May require pip
-* scikit-image
 
 Manual install
 * spams (>=2.2)
@@ -130,5 +126,4 @@ TODO
 ----
 
 * Update install instructions when I've tried it out on a new machine
-* Remove some dependencies (skimge, matplotlib - make optional) 
 * Re-write the python interface for vlfeat DSIFT (pyvlfeat is unmaintained)

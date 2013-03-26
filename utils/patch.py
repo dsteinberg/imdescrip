@@ -32,54 +32,16 @@
 
 import math
 import numpy as np 
-from sklearn.feature_extraction.image import extract_patches_2d
-from skimage.color import rgb2gray
 from scipy.misc import toimage
-from matplotlib import pyplot as plt
-from image import imread_resize
+from image import imread_resize, rgb2gray
 from progress import Progress
 
-def training_patches (imnames, npatches, psize, maxdim=None, colour=False,
-                        verbose=False):
-    """ Extract patches from images for dictionary training
-
-    Arguments:
-        imnames: A list of image names from which to extract training patches.
-        npatches: The number (int) of patches to extract from the images
-        maxdim: The maximum dimension of the image in pixels. The image is
-            rescaled if it is larger than this. By default there is no scaling. 
-        psize: A int of the size of the square patches to extract
-        verbose: bool, print progress bar
-
-    Returns:
-        An np.array (npatches, psize**2*3) for RGB or (npatches, psize**2) for
-        grey of flattened image patches. NOTE, the actual npatches found may be
-        less than that input.
-
-    """
-
-    nimg = len(imnames)
-    ppeimg = int(round(float(npatches)/nimg))
-    plist = []
-
-    # Set up progess updates
-    progbar = Progress(nimg, title='Extracting patches', verbose=verbose)
-
-    for i, ims in enumerate(imnames):
-        img = imread_resize(ims, maxdim) # read in and resize the image
-        
-        # Extract patches and map to grayscale if necessary
-        if (colour == False) and (img.ndim == 3):
-            imgg = rgb2gray(img)
-            plist.append(extract_patches_2d(imgg, (psize, psize), ppeimg))
-        else:
-            plist.append(extract_patches_2d(img, (psize, psize), ppeimg))
-
-        progbar.update(i)
-
-    progbar.finished()
-    patches = np.concatenate(plist, axis=0)
-    return np.reshape(patches, (patches.shape[0], np.prod(patches.shape[1:])))
+# Optional imports
+try: 
+    from matplotlib import pyplot as plt
+    hasmatplotlib = True
+except:
+    hasmatplotlib = False
 
 
 def grid_patches (image, psize, pstride):
@@ -103,13 +65,12 @@ def grid_patches (image, psize, pstride):
 
     # Check and get image dimensions
     if image.ndim == 3:
-        (Iw, Ih, Ic) = image.shape
+        (Ih, Iw, Ic) = image.shape
     elif image.ndim == 2:
-        (Iw, Ih) = image.shape
+        (Ih, Iw) = image.shape
         Ic = 1
     else:
         raise ValueError('image must be a 2D or 3D np.array')
-        
 
     # Make the overlapping grid
     offsetX = int(math.floor(float((Iw - psize) % pstride)/2))
@@ -139,7 +100,51 @@ def grid_patches (image, psize, pstride):
             cnt +=1
 
     return patches, centresx, centresy
+
     
+def training_patches (imnames, npatches, psize, maxdim=None, colour=False,
+                        verbose=False):
+    """ Extract patches from images for dictionary training
+
+    Arguments:
+        imnames: A list of image names from which to extract training patches.
+        npatches: The number (int) of patches to extract from the images
+        maxdim: The maximum dimension of the image in pixels. The image is
+            rescaled if it is larger than this. By default there is no scaling. 
+        psize: A int of the size of the square patches to extract
+        verbose: bool, print progress bar
+
+    Returns:
+        An np.array (npatches, psize**2*3) for RGB or (npatches, psize**2) for
+        grey of flattened image patches. NOTE, the actual npatches found may be
+        less than that input.
+
+    """
+
+    nimg = len(imnames)
+    ppeimg = int(round(float(npatches)/nimg))
+    plist = []
+
+    # Set up progess updates
+    progbar = Progress(nimg, title='Extracting patches', verbose=verbose)
+
+    for i, ims in enumerate(imnames):
+        img = imread_resize(ims, maxdim) # read in and resize the image
+        spaceing = int(round(img.shape[1] *  ppeimg**(-0.5)))
+        
+        # Extract patches and map to grayscale if necessary
+        if (colour == False) and (img.ndim == 3):
+            imgg = rgb2gray(img)
+            plist.append(grid_patches(imgg, psize, spaceing)[0])
+        else:
+            plist.append(grid_patches(img, psize, spaceing)[0])
+
+        progbar.update(i)
+
+    progbar.finished()
+    patches = np.concatenate(plist, axis=0)
+    return np.reshape(patches, (patches.shape[0], np.prod(patches.shape[1:])))
+
 
 def p_maxabs (patches):
     """ Return the maximum of the absolute values of the columns in a matrix.
@@ -263,46 +268,6 @@ def pyramid_pooling (patches, centresx, centresy, imsize, levels=(1,2,4),
     return poolpatches.flatten() 
 
 
-def disp_patches (patches, colour=False):
-    """ Display flattened (square) patches in a grid.
-
-    This function is best for displaying the bases of learned dictionaries.
-
-    Arguments:
-        patches: (npatches, pixels) is a numpy np.array of all of the flattened
-            image patches in each row. These will automatically be scalled to be
-            displayed as images. It is assumed the original patches are square
-        colour: boolean flag indicating whether or not these patches are
-            supposed to be colour or not.
-
-    """
-
-    # Argument checking
-    if (colour == False) and (math.sqrt(patches.shape[1])%1 != 0):
-        raise ValueError('Gray image has to have square patches')
-    elif (colour == True) and (math.sqrt(float(patches.shape[1])/3)%1 != 0):
-        raise ValueError('Colour image has to have square patches')
-
-    # Get patch size
-    if colour == False:
-        psize = math.sqrt(patches.shape[1])  
-    else: 
-        psize = math.sqrt(patches.shape[1]/3)
-    
-    ssize = math.ceil(math.sqrt(patches.shape[0]))
-
-    # plot filters
-    plt.figure()
-    for i, p in enumerate(patches):
-        plt.subplot(ssize, ssize, i + 1)
-        if colour == False:
-            plt.imshow(p.reshape(psize, psize), cmap="gray")
-        else:
-            plt.imshow(toimage(p.reshape(psize, psize, 3), mode='RGB'))
-        plt.axis("off")
-    plt.show()
-
-
 def norm_patches (patches, epsilon=1e-20):
     """ Normalise image patches to each be unit length.
 
@@ -337,5 +302,43 @@ def centre_patches (patches):
     return patches - np.mean(patches, axis=1).reshape(patches.shape[0],1)
 
 
-
-
+if hasmatplotlib == True:
+    def disp_patches (patches, colour=False):
+        """ Display flattened (square) patches in a grid.
+    
+        This function is best for displaying the bases of learned dictionaries.
+    
+        Arguments:
+            patches: (npatches, pixels) is a numpy np.array of all of the
+                flattened image patches in each row. These will automatically be
+                scalled to be displayed as images. It is assumed the original
+                patches are square
+            colour: boolean flag indicating whether or not these patches are
+                supposed to be colour or not.
+    
+        """
+    
+        # Argument checking
+        if (colour == False) and (math.sqrt(patches.shape[1])%1 != 0):
+            raise ValueError('Gray image has to have square patches')
+        elif (colour == True) and (math.sqrt(float(patches.shape[1])/3)%1 != 0):
+            raise ValueError('Colour image has to have square patches')
+    
+        # Get patch size
+        if colour == False:
+            psize = math.sqrt(patches.shape[1])  
+        else: 
+            psize = math.sqrt(patches.shape[1]/3)
+        
+        ssize = math.ceil(math.sqrt(patches.shape[0]))
+    
+        # plot filters
+        plt.figure()
+        for i, p in enumerate(patches):
+            plt.subplot(ssize, ssize, i + 1)
+            if colour == False:
+                plt.imshow(p.reshape(psize, psize), cmap="gray")
+            else:
+                plt.imshow(toimage(p.reshape(psize, psize, 3), mode='RGB'))
+            plt.axis("off")
+        plt.show()

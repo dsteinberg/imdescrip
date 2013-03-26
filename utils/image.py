@@ -16,8 +16,8 @@
 
 """ Some useful and generic commonly performed image operations. """
 
-from skimage.transform import resize
-from scipy.misc import imread
+import cv
+import numpy as np
 
 
 def imread_resize (imname, maxdim=None):
@@ -29,18 +29,44 @@ def imread_resize (imname, maxdim=None):
             None if no resize is to take place (same as imread).
 
     Returns:
-        image: (rows, cols, channels) np.array of the image, if maxdim is not
-            None, then {rows,cols} <= maxdim.  
+        image: (height, width, channels) np.array of the image, if maxdim is not
+            None, then {height, width} <= maxdim.  
     """
 
     # read in the image
-    image = imread(imname)         
+    image = cv.LoadImageM(imname)
 
     # Resize image if necessary
-    imgdim = max(image.shape)
+    imgdim = max(image.rows, image.cols)
     if (imgdim > maxdim) and (maxdim is not None):
         scaler = float(maxdim)/imgdim
-        return resize(image, (round(scaler*image.shape[0]), 
-                              round(scaler*image.shape[1])))
+        imout = cv.CreateMat(int(round(scaler*image.rows)),
+                             int(round(scaler*image.cols)), cv.CV_8UC3)
+        cv.Resize(image, imout)
+        return np.asarray(imout)
     else:
-        return image
+        return np.asarray(image)
+
+
+def rgb2gray (rgbim):
+    """ Convert an RGB image to a gray-scale image.
+
+    Arguments:
+        rgbim: an array (height, width, 3) which is the image. If this image is
+            already a gray-scale image, this function returns it directly.
+
+    Returns:
+        image: an array (height, width, 1) which is a gray-scale version of the
+            image.
+    """
+
+    # Already gray 
+    if rgbim.ndim == 2:
+        return rgbim
+    elif rgbim.ndim != 3:
+        raise ValueError("Need a three channel image!")
+
+    grayim = cv.CreateMat(rgbim.shape[0], rgbim.shape[1], cv.CV_8UC1)
+    cv.CvtColor(cv.fromarray(rgbim), grayim, cv.CV_RGB2GRAY) 
+    return np.asarray(grayim)
+

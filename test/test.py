@@ -100,12 +100,20 @@ class TestImdescrip (unittest.TestCase):
         self.assertEqual(timg.shape[0], 134)
 
 
+    def test_rgb2gray (self):
+        """ Test rgb 2 gray converter """
+
+        timg = image.imread_resize(os.path.join(self.__loc__, 'test.jpg'))
+        gimg = image.rgb2gray(timg)
+        self.assertEqual(gimg.ndim, 2)
+
+
     def test_patches_training_patches (self):
         """ Test getting images patches for training dictionaries. """ 
 
-        tpatches = patch.training_patches(self.tilist, 50, 16)
+        tpatches = patch.training_patches(self.tilist, 20, 16)
         self.assertEqual(tpatches.shape[1], 16**2)
-        self.assertTrue(40 < tpatches.shape[0] < 60) # Not exact, but that's ok
+        self.assertTrue(10 < tpatches.shape[0] < 30) # Not exact, but that's ok
 
 
     def test_DSIFT_patches (self):

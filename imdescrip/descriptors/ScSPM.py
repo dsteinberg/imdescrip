@@ -20,7 +20,7 @@
 import math
 import numpy as np
 from spams import omp, trainDL
-from utils import patch as pch, siftwrap as sw
+from imdescrip.utils import patch as pch, siftwrap as sw
 from descriptor import Descriptor
 
 

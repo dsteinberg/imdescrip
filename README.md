@@ -70,21 +70,24 @@ Dependencies and Installation
 
 This package has the following dependencies:
 
-Common python libraries (probably pre-compiled/packaged for all OSes)
-* scipy
-* numpy
-* matplotlib        (optional)
+System libraries, install these first (use apt-get for ubuntu):
 * libatlas-dev      (spams)
 * libatlas-base-dev (spams)
 * libatlas3gf-base  (spams)
-* libboost\_python  (pyvlfeat)
+* libboost-python  (pyvlfeat)
+
+Common python libraries (probably pre-compiled/packaged for all OSes)
+* scipy
+* numpy
+* matplotlib (optional)
 
 Manual install
 * spams (>=2.2)
 * pyvlfeat
 
-Once all of these dependencies have been installed, this package can simply be
-placed in your python path.
+Once all of these dependencies have been installed (this needs to be done
+manually), this package can simply be placed in your python path or you can use
+the setup.py with easy\_install or pip.
 
 ### Notes
 
@@ -110,8 +113,8 @@ Also spams is a manual install:
 Usage
 -----
 
-Have a look at "example\_extract.py" for some usage examples, and how I would
-use the ScSPM descriptor. Typically a work flow consists of:
+Have a look at "scripts\example\_extract.py" for some usage examples, and how I
+would use the ScSPM descriptor. Typically a work flow consists of:
 
 1. Instantiating and training a descriptor object (e.g. ScSPM)
 2. Saving this object with pickle.
@@ -125,5 +128,4 @@ training.
 TODO
 ----
 
-* Update install instructions when I've tried it out on a new machine
 * Re-write the python interface for vlfeat DSIFT (pyvlfeat is unmaintained)

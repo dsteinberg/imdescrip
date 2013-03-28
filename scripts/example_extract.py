@@ -18,28 +18,34 @@
 
 import glob 
 import cPickle as pk
-from extractors.extractor import extract_smp
-from descriptors.ScSPM import ScSPM
+from imdescrip.extractor import extract_smp
+from imdescrip.descriptors.ScSPM import ScSPM
+
 
 # Make a list of images
-imgdir   = '/home/dsteinberg/Datasets/Tas2008_5/Images/'
-savdir   = '/home/dsteinberg/Datasets/Tas2008_5/Images/imdesc/'
-filelist = glob.glob(imgdir + '*.png') 
+imgdir   = '/home/dsteinberg/Datasets/Tas2008_12/Images/'
+savdir   = '/home/dsteinberg/Datasets/Tas2008_12/Images/imdesc/'
+filelist = glob.glob(imgdir + '*.png')
 
-#imgdir   = '/home/dsteinberg/Datasets/outdoor_scenes/Images/'
-#savdir   = '/home/dsteinberg/Datasets/outdoor_scenes/Images/imdesc/'
-#filelist = glob.glob(imgdir + '*.jpg') 
+#imgdir  = '/home/dsteinberg/Datasets/outdoor_scenes/Images/'
+#savdir  = '/home/dsteinberg/Datasets/outdoor_scenes/Images/imdesc/'
+#filelist += glob.glob(imgdir + '*.jpg')
+
+#imgdir   = '/home/dsteinberg/Datasets/Caltech101_sub/'
+#filelist += glob.glob(imgdir + '*.jpg')
+#print len(filelist)
+
 
 # Train a dictionary
 #desc = ScSPM(dsize=512, compress_dim=3000)
-#desc.learn_dictionary(filelist)
+#desc.learn_dictionary(filelist, npatches=200000, niter=5000)
 
 # Save the dictionary
-#with open('sc_auv.p', 'wb') as f:
+#with open('ScSPM.p', 'wb') as f:
     #pk.dump(desc, f, protocol=2)
 
 # OR Load a pre-learned dictionary 
-with open('sc_auv.p', 'rb') as f:
+with open('ScSPM.p', 'rb') as f:
     desc = pk.load(f)
 
 extract_smp(filelist, savdir, desc, verbose=True) 

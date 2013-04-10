@@ -30,7 +30,10 @@ def imread_resize (imname, maxdim=None):
 
     Returns:
         image: (height, width, channels) np.array of the image, if maxdim is not
-            None, then {height, width} <= maxdim.  
+            None, then {height, width} <= maxdim.
+
+    Note: either gray scale or RGB images are returned depending on the original
+            image's type.
     """
 
     # read in the image
@@ -41,11 +44,18 @@ def imread_resize (imname, maxdim=None):
     if (imgdim > maxdim) and (maxdim is not None):
         scaler = float(maxdim)/imgdim
         imout = cv.CreateMat(int(round(scaler*image.rows)),
-                             int(round(scaler*image.cols)), cv.CV_8UC3)
+                             int(round(scaler*image.cols)), image.type)
         cv.Resize(image, imout)
-        return np.asarray(imout)
     else:
-        return np.asarray(image)
+        imout = image
+
+    # BGR -> RGB colour conversion
+    if image.type == cv.CV_8UC3:
+        imcol = cv.CreateMat(imout.rows, imout.cols, cv.CV_8UC3)
+        cv.CvtColor(imout, imcol, cv.CV_BGR2RGB)
+        return np.asarray(imcol)
+    else:
+        return np.asarray(imout)
 
 
 def rgb2gray (rgbim):

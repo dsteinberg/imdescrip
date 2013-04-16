@@ -19,6 +19,7 @@
 
 import math
 import numpy as np
+from hashlib import md5
 from spams import omp, trainDL
 from imdescrip.utils import patch as pch, siftwrap as sw
 from descriptor import Descriptor
@@ -99,6 +100,8 @@ class ScSPM (Descriptor):
             D = np.sum(np.array(levels)**2) * self.dsize
             self.rmat = np.random.randn(D, self.compress_dim)
             self.rmat = self.rmat / np.sqrt((self.rmat**2).sum(axis=0))
+        else:
+            self.rmat = None
 
 
     def extract (self, impath):
@@ -169,3 +172,23 @@ class ScSPM (Descriptor):
         self.dic = trainDL(np.asfortranarray(patches.T, np.float64), mode=0,
                        K=self.dsize, lambda1=0.15, iter=niter, numThreads=njobs)
         print('done')
+
+
+    def get_hash (self):
+        """ Get a hash (md5) of the dictionary and random matrix.
+
+        TODO
+
+        """
+
+        if self.dic is None:
+            raise ValueError('No dictionary has been learned!')
+
+        hashencode = md5() 
+
+        if self.rmat is None:
+            hashencode.update(self.dic)
+            return hashencode.hexdigest()
+        else:
+            hashencode.update([self.dic, self.rmat])
+            return hashencode.hexdigest()

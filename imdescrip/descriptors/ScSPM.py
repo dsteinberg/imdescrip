@@ -177,18 +177,25 @@ class ScSPM (Descriptor):
     def get_hash (self):
         """ Get a hash (md5) of the dictionary and random matrix.
 
-        TODO
+        This function returns an md5 hash for this object's dictionary, and a
+        seperate hash for the for the random projection matrix if it exists. 
+
+        Returns:
+            string dicionary md5 hash.
+            string projection matrix md5 hash if compress_dim is not None.
 
         """
 
         if self.dic is None:
             raise ValueError('No dictionary has been learned!')
 
-        hashencode = md5() 
-
+        # Just calculating these hashes here because md5 is so fast
+        diccode = md5() 
+        diccode.update(self.dic)
+            
         if self.rmat is None:
-            hashencode.update(self.dic)
-            return hashencode.hexdigest()
+            return diccode.hexdigest()
         else:
-            hashencode.update([self.dic, self.rmat])
-            return hashencode.hexdigest()
+            rmatcode = md5() 
+            rmatcode.update(self.rmat)
+            return diccode.hexdigest(), rmatcode.hexdigest() 

@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import glob 
+import glob, sys
 import cPickle as pk
 from imdescrip.extractor import extract_smp
 from imdescrip.descriptors.ScSPM import ScSPM
@@ -35,17 +35,16 @@ filelist = glob.glob(imgdir + '*.png')
 #filelist += glob.glob(imgdir + '*.jpg')
 #print len(filelist)
 
-
 # Train a dictionary
-#desc = ScSPM(dsize=512, compress_dim=3000)
-#desc.learn_dictionary(filelist, npatches=200000, niter=5000)
+desc = ScSPM(dsize=512, compress_dim=3000)
+desc.learn_dictionary(filelist, npatches=200000, niter=5000)
 
 # Save the dictionary
-#with open('ScSPM.p', 'wb') as f:
-    #pk.dump(desc, f, protocol=2)
+with open('ScSPM.p', 'wb') as f:
+    pk.dump(desc, f, protocol=2)
 
 # OR Load a pre-learned dictionary 
-with open('ScSPM.p', 'rb') as f:
-    desc = pk.load(f)
+#with open('ScSPM.p', 'rb') as f:
+    #desc = pk.load(f)
 
 extract_smp(filelist, savdir, desc, verbose=True) 

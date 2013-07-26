@@ -1,1 +1,0 @@
-INSTALL (CODE "EXEC_PROGRAM(sudo ARGS \"pip install \" \"${CMAKE_CURRENT_SOURCE_DIR}\") ")

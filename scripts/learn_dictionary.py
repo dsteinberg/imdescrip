@@ -22,13 +22,18 @@ import argparse
 from imdescrip.extractor import extract_smp
 from imdescrip.descriptors.ScSPM import ScSPM
 
-parser = argparse.ArgumentParser(description="Create a ScSPM dictionary.")
+parser = argparse.ArgumentParser(description="Create a ScSPM dictionary.",
+                        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("imagedir", help="Directory of training images.")
 parser.add_argument("extension", help="Image file extension (eg. 'png').")
-parser.add_argument("--dicname", help="Name and path of dictionary file to save.", default="ScSPM.p")
-parser.add_argument("--nbases", help="Number of dictionary bases.", type=int, default=512)
-parser.add_argument("--dcompress", help="Number of dimensions to compress features to.", type=int, default=3000)
-parser.add_argument("--npatches", help="Number of image patches to use to learn dictionary.", type=int, default=200000)
+parser.add_argument("--dicname", help="Name and path of dictionary file to " 
+                    "save.", default="ScSPM.p")
+parser.add_argument("--nbases", help="Number of dictionary bases.", type=int, 
+                    default=512)
+parser.add_argument("--dcompress", help="Number of dimensions to compress "
+                    "features to.", type=int, default=3000)
+parser.add_argument("--npatches", help="Number of image patches to use to learn"
+                    " dictionary.", type=int, default=200000)
 args = parser.parse_args()
 
 # Make a list of images

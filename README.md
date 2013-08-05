@@ -82,7 +82,7 @@ Common python libraries (probably pre-compiled/packaged for all OSes)
 * matplotlib (optional)
 
 Manual install
-* spams (>=2.2)
+* spams (>=2.3)
 * pyvlfeat
 
 Once all of these dependencies have been installed (this needs to be done

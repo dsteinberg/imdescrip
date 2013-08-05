@@ -19,7 +19,7 @@ setup(
     install_requires=[
         "scipy >= 0.9.0", 
         "numpy >= 1.6.1",
-        "spams >= 2.2",
+        "spams >= 2.3",
         "pyvlfeat >= 0.1.1a3"
         ]
 )

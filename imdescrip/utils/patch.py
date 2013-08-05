@@ -117,7 +117,7 @@ def training_patches (imnames, npatches, psize, maxdim=None, colour=False,
     Returns:
         An np.array (npatches, psize**2*3) for RGB or (npatches, psize**2) for
         grey of flattened image patches. NOTE, the actual npatches found may be
-        less than that input.
+        less than that requested.
 
     """
 
@@ -130,7 +130,7 @@ def training_patches (imnames, npatches, psize, maxdim=None, colour=False,
 
     for i, ims in enumerate(imnames):
         img = imread_resize(ims, maxdim) # read in and resize the image
-        spaceing = int(round(img.shape[1] *  ppeimg**(-0.5)))
+        spaceing = max(int(round(img.shape[1] *  ppeimg**(-0.5))), 1)
         
         # Extract patches and map to grayscale if necessary
         if (colour == False) and (img.ndim == 3):

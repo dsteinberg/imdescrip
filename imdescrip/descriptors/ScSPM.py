@@ -18,6 +18,7 @@
 
 
 import math
+import time
 import numpy as np
 from hashlib import md5
 from spams import omp, trainDL
@@ -163,15 +164,19 @@ class ScSPM (Descriptor):
         """
 
         # Get SIFT training patches 
+        print('Getting training patches...')
         patches = sw.training_patches(images, npatches, self.psize, self.maxdim,
                                         verbose=True)
         patches = pch.norm_patches(patches)
+        print('{0} patches requested, {1} patches found.'.format(npatches,
+                patches.shape[0]))
+        time.sleep(3) # Give people a chance to see this message
           
         # Learn dictionary
         print('Learning dictionary...')
         self.dic = trainDL(np.asfortranarray(patches.T, np.float64), mode=0,
                        K=self.dsize, lambda1=0.15, iter=niter, numThreads=njobs)
-        print('done')
+        print('done.')
 
 
     def get_hash (self):

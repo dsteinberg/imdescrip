@@ -47,7 +47,7 @@ def training_patches (imnames, npatches, psize, maxdim=None, verbose=False):
 
     Returns:
         An np.array (npatches, 128) of SIFT descriptors. NOTE, the actual 
-        npatches found may be slightly more or less than that input.
+        npatches found may be slightly more or less than that requested.
 
     Note:   
         The SIFT descriptors output by vlfeat are [0, 255] integers!
@@ -74,7 +74,8 @@ def training_patches (imnames, npatches, psize, maxdim=None, verbose=False):
             img = rgb2gray(img)
 
         # Extract the patches
-        spaceing = int(math.floor(math.sqrt(float(np.prod(img.shape))/ppeimg)))
+        spaceing = max(1, int(math.floor(math.sqrt( \
+                        float(np.prod(img.shape))/ppeimg))))
         xy, desc = vl_dsift(np.float32(img), step=spaceing, size=bsize)
         plist.append(desc.T)
         
@@ -105,6 +106,9 @@ def DSIFT_patches (image, psize, pstride):
         The SIFT descriptors output by vlfeat are [0, 255] integers!
 
     """
+
+    if pstride < 1:
+        raise ValueError('pstride needs to be 1 pixel or more!')
 
     if image.ndim > 2:
         image = rgb2gray(image)

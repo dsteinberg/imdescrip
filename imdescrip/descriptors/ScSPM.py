@@ -133,7 +133,8 @@ class ScSPM (Descriptor):
 
         # Get OMP codes 
         scpatch = np.transpose(omp(np.asfortranarray(patches.T, np.float64), 
-                                self.dic, self.active, numThreads=1).todense())
+                                self.dic, self.active, eps=np.spacing(1), 
+                                numThreads=1).todense())
 
         # Pyramid pooling and normalisation
         fea = pch.pyramid_pooling(scpatch, cx, cy, img.shape, self.levels)

@@ -74,7 +74,8 @@ System libraries, install these first (use apt-get for ubuntu):
 * libatlas-dev      (spams)
 * libatlas-base-dev (spams)
 * libatlas3gf-base  (spams)
-* libboost-python  (pyvlfeat)
+* libboost-python   (pyvlfeat, this worked with v1.49 but not v1.53 on Ubuntu)
+* python-opencv     (image reading and manipulation)
 
 Common python libraries (probably pre-compiled/packaged for all OSes)
 * scipy
@@ -129,3 +130,9 @@ TODO
 ----
 
 * Re-write the python interface for vlfeat DSIFT (pyvlfeat is unmaintained)
+
+
+Thanks
+------
+
+* Oscar Pizarro - for finding the occasional problem with the OMP code.

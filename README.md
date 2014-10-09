@@ -2,16 +2,16 @@ Imdescrip
 =========
 
 A collection of python tools for extracting descriptors from images (whole and
-sub-image descriptors).
+sub-image descriptors). Specifically, a slightly modified version of Yang's
+sparse coding spatial pyramid matching (ScSPM) [1] and a way to reduce the
+dimensionality of these features.
 
 
-*Author*: Daniel Steinberg
+*Author*: [Daniel Steinberg](http://www.daniel-steinberg.info)
 
-*Institute*: Australian Centre for Field Robotics, The University of Sydney
+*Date*: 20 Feb 2013
 
-*Date*: 20/02/2013
-
-*License*: GPL v3 (See LICENSE)
+*License*: LGPL v3 (See COPYING and COPYING.LESSER)
 
 *References*:
 
@@ -28,16 +28,17 @@ sub-image descriptors).
 Functionality
 -------------
 
-It's probably easiest to describe what this package can do by breaking down each
-sub-folder/package.
+It's probably easiest to describe what this package can do by breaking down
+each sub-folder/package.
 
 
 ### descriptors:
 
 Actual classes for extracting descriptors/features from images. For instance, a
-modified versions of Yang et. al.'s sparse code spatial pyramid matching (ScSPM)
-[1] descriptor is implemented here. Also provided is an abstract base class for
-implementing new descriptor classes that work with the extractor model.
+modified versions of Yang et. al.'s sparse code spatial pyramid matching
+(ScSPM) [1] descriptor is implemented here. Also provided is an abstract base
+class for implementing new descriptor classes that work with the extractor
+model.
 
 
 ### extractors:
@@ -66,7 +67,7 @@ Unit tests for this package.
 
 
 Dependencies and Installation
-------------
+-----------------------------
 
 This package has the following dependencies:
 
@@ -114,7 +115,7 @@ Also spams is a manual install:
 Usage
 -----
 
-Have a look at "scripts\example\_extract.py" for some usage examples, and how I
+Have a look at `scripts\example\_extract.py` for some usage examples, and how I
 would use the ScSPM descriptor. Typically a work flow consists of:
 
 1. Instantiating and training a descriptor object (e.g. ScSPM)

@@ -115,7 +115,7 @@ Also spams is a manual install:
 Usage
 -----
 
-Have a look at `scripts\example\_extract.py` for some usage examples, and how I
+Have a look at `scripts\example_extract.py` for some usage examples, and how I
 would use the ScSPM descriptor. Typically a work flow consists of:
 
 1. Instantiating and training a descriptor object (e.g. ScSPM)

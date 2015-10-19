@@ -38,7 +38,7 @@ filelist = glob.glob(imgdir + '*.png')
 #print len(filelist)
 
 # Train a dictionary
-desc = ScSPM(dsize=512, compress_dim=3000)
+desc = ScSPM(dsize=512, compress_dim=None)
 desc.learn_dictionary(filelist, npatches=200000, niter=5000)
 
 # Save the dictionary

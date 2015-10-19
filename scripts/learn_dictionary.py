@@ -33,7 +33,7 @@ parser.add_argument("--dicname", help="Name and path of dictionary file to "
 parser.add_argument("--nbases", help="Number of dictionary bases.", type=int, 
                     default=512)
 parser.add_argument("--dcompress", help="Number of dimensions to compress "
-                    "features to.", type=int, default=3000)
+                    "features to.", type=int, default=None)
 parser.add_argument("--npatches", help="Number of image patches to use to learn"
                     " dictionary.", type=int, default=200000)
 args = parser.parse_args()

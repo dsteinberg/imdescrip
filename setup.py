@@ -9,7 +9,7 @@ setup(
     version='1.0',
     description='Image descriptor extraction routines.',
     author='Daniel Steinberg',
-    author_email='d.steinberg@acfr.usyd.edu.au',
+    author_email='dan.m.steinberg@gmail.com',
     url='https://github.com/dsteinberg/imdescrip',
     packages=[
         'imdescrip',

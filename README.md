@@ -7,7 +7,7 @@ sparse coding spatial pyramid matching (ScSPM) [1] and a way to reduce the
 dimensionality of these features.
 
 
-*Author*: [Daniel Steinberg](http://www.daniel-steinberg.info)
+*Author*: [Daniel Steinberg](http://dsteinberg.github.io/)
 
 *Date*: 20 Feb 2013
 
